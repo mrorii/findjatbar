@@ -5,7 +5,6 @@ import argparse
 import time
 
 import lxml.html
-import lxml.etree
 import requests
 
 from reviews import Review
