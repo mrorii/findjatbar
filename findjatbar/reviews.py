@@ -2,4 +2,4 @@
 
 from collections import namedtuple
 
-Review = namedtuple('Review', 'author, restaurant_id, entry')
+Review = namedtuple('Review', 'restaurant_id, author, entry')
