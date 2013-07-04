@@ -34,4 +34,5 @@ nosetests.xml
 .project
 .pydevproject
 
-*.txt
+output/
+*.json

@@ -3,6 +3,7 @@
 import sys
 import argparse
 import time
+import json
 
 import lxml.html
 import requests
@@ -50,9 +51,9 @@ def main():
         url = '{}/{}/{}'.format(web_archive_url, args.archive_time, jatbar_url)
         reviews = scrape(url, restaurant_id)
         for review in reviews:
-            print('{}\t{}\t{}'.format(review.author,
-                                      review.restaurant_id,
-                                      review.entry))
+            print('{}'.format(json.dumps({'restaurant_id': review.restaurant_id,
+                                          'author': review.author,
+                                          'description': review.entry.encode('utf8')})))
         time.sleep(1)
 
 if __name__ == '__main__':
