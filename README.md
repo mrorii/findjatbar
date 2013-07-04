@@ -23,16 +23,24 @@ Obtain a list of restaurants stored in Jatbar.
                                                > output/jatbar_reviews.json
 
 
-## Step 2: crawl Yelp reviews
+## Step 2: scrape Yelp reviews
 
-Yelp doesn't currently have a full API to retrieve reviews, so we are forced to crawl.
+Yelp doesn't currently have a full API to retrieve reviews, so we are forced to scrape them.
 We need to first find out the corresponding Yelp URL for the each of the restaurants on Jatbar.
 
     python findjatbar/find_corresponding_yelp_urls.py < output/restaurants.txt \
                                                       > output/yelp_urls.txt
+
+We can then scrape the Yelp reviews.
+For simplicity, we only scrape the reviews on the first page of a venue.
+
     python findjatbar/scrape_yelp_reviews.py < output/yelp_urls.txt \
                                              > output/yelp_reviews.json
 
 ## Step 3: train and test
+
+    cat yelp_reviews.json jatbar_reviews.json > reviews.json
+    python findjatbar/split_data.py reviews.json
+    python findjatbar/classify.py --prefix .
 
 TODO
