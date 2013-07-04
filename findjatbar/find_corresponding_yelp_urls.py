@@ -86,7 +86,7 @@ def main():
                                 consumer_secret=args.consumer_secret,
                                 token=args.token,
                                 token_secret=args.token_secret)
-        if i % 3 == 0:
+        if i % 100 == 0:
             logging.info('Iteration {}'.format(i))
         print('{}\t{}'.format(restaurant_id, yelp_url))
 

@@ -21,8 +21,8 @@ def main():
     doc = lxml.html.fromstring(res.content)
     xpath = ".//select[@name='restaurants']/option"
 
+    # Skip the first option as it is not a restaurant
     for i, restaurant in enumerate(islice(doc.findall(xpath), 1, None)):
-        # Skip the first option as it is not a restaurant
         restaurant_name = restaurant.text.strip()
         restaurant_url = restaurant.values()[0]
         print('{}\t{}\t{}'.format(i + 1, restaurant_name, restaurant_url))
