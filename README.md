@@ -12,12 +12,13 @@ Python 2.7 is required. Install dependencies with:
 
     pip install -r requirements.txt
 
-## Step 1: crawl Jason and Terry's reviews from the Internet Archive
+## Step 1: scrape Jason and Terry's reviews from the Internet Archive
 
 Obtain a list of restaurants stored in Jatbar.
 
     mkdir crawl-jatbar
     python findjatbar/get_restaurants.py > restaurants.txt
+    python findjatbar/scrape_jatbar_reviews.py < restaurants.txt > jatbar_reviews.txt
 
 
 ## Step 2: crawl Yelp reviews
