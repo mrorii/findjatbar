@@ -1,3 +1,4 @@
 lxml
 requests
 oauth2
+sklearn
