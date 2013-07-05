@@ -45,7 +45,7 @@ def print_confusion_matrix(y_test, y_pred):
         print(line)
 
 
-def plot_pr_curve(filename, y_test, probas_)
+def plot_pr_curve(filename, y_test, probas_):
         precision, recall, thresholds = precision_recall_curve(y_test, probas_[:, 1])
         area = auc(recall, precision)
 
