@@ -58,12 +58,17 @@ We next split all of the reviews into the train, dev, and test set.
 Here, we must specify whose review we want to classify as positive:
 this can be `Jason`, `Terry`, or `Both`.
 
-    python findjatbar/split_data.py output/reviews.json Jason output --seed 123
+    mkdir dataset_jason
+    python findjatbar/split_data.py output/reviews.json Jason dataset_jason --seed 123
 
-Finally, we train a classifier, tune it on the dev set, and test.
+This creates the files `train.json`, `dev.json`, and `test.json`
+in the specified `dataset_jason` directory.
+
+Finally, we train a classifier using `train.json`, tune it on `dev.json`,
+and test on `test.json`.
 This step can eat up to about 5GB of memory.
 
-    python findjatbar/classify.py output --pr_curve output/pr_curve.png
+    python findjatbar/classify.py dataset_jason --pr_curve output/pr_curve.png
 
 
 ## Acknowledgements

@@ -41,17 +41,6 @@ def ngrams(tokens):
             yield (3, ' '.join(ngram))
 
 
-def name(item):
-    name = tokenize(item['name'])
-    nname = sorted(set(w for w in name if w not in _stop))
-    if not nname:
-        yield ('norm-name', '?')
-    else:
-        yield ('norm-name', ' '.join(nname))
-        for (c, w) in ngrams(name):
-            yield ('name', str(c), w)
-
-
 def description(item):
     desc = tokenize(item['description'])
     if not desc:

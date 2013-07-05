@@ -24,6 +24,42 @@ def read_dataset(filename):
     return X, y
 
 
+def print_confusion_matrix(y_test, y_pred):
+    conf_mat = confusion_matrix(y_test, y_pred)
+    actual = ' Actual '
+    vertical_bar = ' | '
+    horizontal_bar = '-'
+
+    conf_mat_as_strings = str(conf_mat).split('\n')
+    right_padding_length = max(map(lambda s: len(s), conf_mat_as_strings))
+    left_padding_length = len(actual)
+
+    lines = []
+    lines.append(' ' * left_padding_length + vertical_bar +  'Predicted')
+    lines.append('-' * (left_padding_length + len(vertical_bar) + right_padding_length))
+    for i, line in enumerate(conf_mat_as_strings):
+        left_padding = actual if i == 0 else ' ' * left_padding_length
+        lines.append(left_padding + vertical_bar + line)
+    print('Confusion matrix')
+    for line in lines:
+        print(line)
+
+
+def plot_pr_curve(filename, y_test, probas_)
+        precision, recall, thresholds = precision_recall_curve(y_test, probas_[:, 1])
+        area = auc(recall, precision)
+
+        pl.clf()
+        pl.plot(recall, precision, label='Precision-Recall curve')
+        pl.xlabel('Recall')
+        pl.ylabel('Precision')
+        pl.ylim([0.0, 1.05])
+        pl.xlim([0.0, 1.0])
+        pl.title('Precision-Recall: AUC=%0.2f' % area)
+        pl.legend(loc="lower left")
+        pl.savefig(filename)
+
+
 def main():
     logging.basicConfig(level=logging.INFO, format='%(message)s')
 
@@ -74,42 +110,11 @@ def main():
     print_weights('Most positive 30 weights', islice(sorted_weights, 30))
     print_weights('Most negative 30 weights', islice(reversed(sorted_weights), 30))
 
-    def print_confusion_matrix(y_test, y_pred):
-        conf_mat = confusion_matrix(y_test, y_pred)
-        actual = ' Actual '
-        vertical_bar = ' | '
-        horizontal_bar = '-'
-
-        conf_mat_as_strings = str(conf_mat).split('\n')
-        right_padding_length = max(map(lambda s: len(s), conf_mat_as_strings))
-        left_padding_length = len(actual)
-
-        lines = []
-        lines.append(' ' * left_padding_length + vertical_bar +  'Predicted')
-        lines.append('-' * (left_padding_length + len(vertical_bar) + right_padding_length))
-        for i, line in enumerate(conf_mat_as_strings):
-            left_padding = actual if i == 0 else ' ' * left_padding_length
-            lines.append(left_padding + vertical_bar + line)
-        print('Confusion matrix')
-        for line in lines:
-            print(line)
-
     print_confusion_matrix(y_test, y_pred)
 
     if args.pr_curve:
         probas_ = best_model.predict_proba(X_test)
-        precision, recall, thresholds = precision_recall_curve(y_test, probas_[:, 1])
-        area = auc(recall, precision)
-
-        pl.clf()
-        pl.plot(recall, precision, label='Precision-Recall curve')
-        pl.xlabel('Recall')
-        pl.ylabel('Precision')
-        pl.ylim([0.0, 1.05])
-        pl.xlim([0.0, 1.0])
-        pl.title('Precision-Recall: AUC=%0.2f' % area)
-        pl.legend(loc="lower left")
-        pl.savefig(args.pr_curve)
+        plot_pr_curve(args.pr_curve, y_test, probas_)
 
 if __name__ == '__main__':
     main()

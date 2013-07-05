@@ -18,7 +18,6 @@ def scrape(url, restaurant_id):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
-    reviews = []
     for li in doc.findall(".//div[@id='reviews-other']/ul/li"):
         comment_node = li.find(".//p[@itemprop='description']")
         entry = ' '.join(comment_node.itertext())
@@ -29,13 +28,12 @@ def scrape(url, restaurant_id):
         author = ''
         if a_node is not None:
             href = a_node.values()[0]
-            # href = "/user_details?userid=BZtafoOqXIxTvUgkoEpBJw"
+            # `href` will look like "/user_details?userid=BZtafoOqXIxTvUgkoEpBJw"
             author = href[href.find('=') + 1:]
 
         review = Review(author=author, restaurant_id=restaurant_id,
                         entry=entry)
-        reviews.append(review)
-    return reviews
+        yield review
 
 
 def main():
