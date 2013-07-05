@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from collections import deque
+from collections import deque, Counter
 import re
 import json
 
@@ -67,7 +67,7 @@ def filter(stream, mask):
 
 
 def prune(instances, threshold=5):
-    feature_counts = defaultdict(int)
+    feature_counts = Counter()
     for instance in instances:
         for feature in instance:
             feature_counts[feature] += 1
@@ -75,7 +75,7 @@ def prune(instances, threshold=5):
     valid_features = set(f for f in feature_counts if feature_counts[f] >= threshold)
 
     for instance in instances:
-        for feature in instance:
+        for feature in instance.keys():
             if not feature in valid_features:
                 del instance[feature]
     return instances

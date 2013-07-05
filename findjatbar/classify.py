@@ -74,6 +74,7 @@ def main():
     logging.info('Loading training data...')
     X_train, y_train = read_dataset(os.path.join(args.prefix, 'train.json'))
     # Only include feature instances that occur in at least 5 different training instances
+    logging.info('Pruning training data...')
     X_train = features.prune(X_train, threshold=3)
     X_train = vectorizer.fit_transform(X_train)
 
