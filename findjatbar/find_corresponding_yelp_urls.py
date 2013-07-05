@@ -87,7 +87,7 @@ def main():
                                 token=args.token,
                                 token_secret=args.token_secret)
         if i % 100 == 0:
-            logging.info('Restaurant {}'.format(i))
+            logging.info('Processing the {}th restaurant'.format(i))
         print('{}\t{}'.format(restaurant_id, yelp_url))
 
 if __name__ == '__main__':

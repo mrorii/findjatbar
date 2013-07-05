@@ -30,9 +30,16 @@ Scrape Jason and Terry's reviews given the list of restaurants:
 ## Step 2: scrape Yelp reviews
 
 Yelp doesn't currently have a full API to retrieve reviews, so we must scrape them.
-We need to first find out the corresponding Yelp URL for the each of the restaurants on Jatbar:
 
-    python findjatbar/find_corresponding_yelp_urls.py < output/restaurants.txt \
+We need to first find out the corresponding Yelp URL for the each of the restaurants on Jatbar.
+In order to do so, you must first register for
+[Yelp's API](http://www.yelp.com/developers/getting_started).
+
+    python findjatbar/find_corresponding_yelp_urls.py --consumer_key YOUR_CONSUMER_KEY \
+                                                      --consumer_secret YOUR_CONSUMER_SECRET \
+                                                      --token YOUR_TOKEN \
+                                                      --token_secret YOUR_TOKEN_SECRET \
+                                                      < output/restaurants.txt \
                                                       > output/yelp_urls.txt
 
 We can then scrape the Yelp reviews.
