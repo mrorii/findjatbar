@@ -19,6 +19,9 @@ Obtain a list of restaurants stored in Jatbar.
 
     mkdir output
     python findjatbar/get_restaurants.py > output/restaurants.txt
+
+Scrape Jason and Terry's reviews given the list of restaurants:
+
     python findjatbar/scrape_jatbar_reviews.py < output/restaurants.txt \
                                                > output/jatbar_reviews.json
 
@@ -26,7 +29,7 @@ Obtain a list of restaurants stored in Jatbar.
 ## Step 2: scrape Yelp reviews
 
 Yelp doesn't currently have a full API to retrieve reviews, so we must scrape them.
-We need to first find out the corresponding Yelp URL for the each of the restaurants on Jatbar.
+We need to first find out the corresponding Yelp URL for the each of the restaurants on Jatbar:
 
     python findjatbar/find_corresponding_yelp_urls.py < output/restaurants.txt \
                                                       > output/yelp_urls.txt
@@ -39,8 +42,18 @@ For simplicity, we only scrape the reviews on the first page of a venue.
 
 ## Step 3: train and test
 
+We first combine both types of reviews into one file:
+
     cat output/yelp_reviews.json output/jatbar_reviews.json > output/reviews.json
+
+We next split all of the reviews into the train, dev, and test set.
+Here, we must specify whose review we want to classify as positive:
+this can be `Jason`, `Terry`, or `Both`.
+
     python findjatbar/split_data.py output/reviews.json Jason output --seed 123
+
+Finally, we train a classifier, tune it on the dev set, and test:
+
     python findjatbar/classify.py output
 
 
