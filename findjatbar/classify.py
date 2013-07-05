@@ -69,10 +69,10 @@ def main():
     def print_weights(heading, iterator):
         print(heading)
         for i, (feat, weight) in enumerate(iterator):
-            print('{0}: {1} {2}'.format(i+1, feat, weight))
+            print('{0:02d}: {1} {2}'.format(i+1, feat, weight))
 
-    print_weights('\nMost positive 30 weights:', islice(sorted_weights, 30))
-    print_weights('\nMost negative 30 weights:', islice(reversed(sorted_weights), 30))
+    print_weights('Most positive 30 weights', islice(sorted_weights, 30))
+    print_weights('Most negative 30 weights', islice(reversed(sorted_weights), 30))
 
     def print_confusion_matrix(y_test, y_pred):
         conf_mat = confusion_matrix(y_test, y_pred)
@@ -90,7 +90,7 @@ def main():
         for i, line in enumerate(conf_mat_as_strings):
             left_padding = actual if i == 0 else ' ' * left_padding_length
             lines.append(left_padding + vertical_bar + line)
-        print('\nConfusion matrix:')
+        print('Confusion matrix')
         for line in lines:
             print(line)
 
@@ -107,7 +107,7 @@ def main():
         pl.ylabel('Precision')
         pl.ylim([0.0, 1.05])
         pl.xlim([0.0, 1.0])
-        pl.title('Precision-Recall example: AUC=%0.2f' % area)
+        pl.title('Precision-Recall: AUC=%0.2f' % area)
         pl.legend(loc="lower left")
         pl.savefig(args.pr_curve)
 
