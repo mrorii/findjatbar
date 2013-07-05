@@ -43,8 +43,8 @@ def main():
 
     logging.info('Training...')
     f1_scores = []
-    for regularization in (100, 10, 1, 0.1, 0.01):
-        model = LogisticRegression(penalty='l1', C=regularization)
+    for regularization in (0.01, 0.1, 1, 10, 100, 1000):
+        model = LogisticRegression(penalty='l1', C=regularization, class_weight='auto')
         logging.info('regularization parameter: {0}'.format(regularization))
         model.fit(X_train, y_train)
         score = f1_score(y_dev, model.predict(X_dev))
@@ -60,14 +60,14 @@ def main():
     print('Tuned regularization parameter: {0} (f1={1})'.format(best_regularization, best_f1_score))
     print('Test f1: {0}'.format(f1_score(y_test, best_model.predict(X_test))))
 
-    weights = vectorizer.inverse_transform(best_model.coef_)
+    weights = vectorizer.inverse_transform(best_model.coef_)[0]
     sorted_weights = sorted(weights.iteritems(), key=lambda x: x[1], reverse=True)
-    print()
+    print
     print('Top 30 weights:')
     for i, (feat, weight) in enumerate(islice(sorted_weights, 30)):
         print('{0}: {1} {2}'.format(i+1, feat, weight))
 
-    print()
+    print
     print('Bottom 30 weights:')
     for i, (feat, weight) in enumerate(islice(reversed(sorted_weights), 30)):
         print('{0} {1} {2}'.format(i+1, feat, weight))
