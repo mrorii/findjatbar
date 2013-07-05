@@ -1,11 +1,12 @@
 # findjatbar
 
 [jatbar.com](http://www.jatbar.com/) (Jason and Terry's Bay Area Review)
-was a very useful restaurant review site for the Bay Area.
-Unfortunately, this site was closed in 2009 :cry:.
+was a legendary restaurant review site for the Bay Area.
+Unfortunately, the website was closed in 2009 :cry:.
 
-Let's see if Jason and Terry aren't hiding in [Yelp](http://www.yelp.com/)
+Let's see if Jason and Terry aren't hiding on [Yelp](http://www.yelp.com/)
 by using machine learning.
+We'll create models to determine whether a review is written by Jason or Terry.
 
 ## Requirements
 
@@ -55,7 +56,7 @@ this can be `Jason`, `Terry`, or `Both`.
 Finally, we train a classifier, tune it on the dev set, and test.
 This step can eat up to about 5GB of memory.
 
-    python findjatbar/classify.py output --pr_curve pr_curve.png
+    python findjatbar/classify.py output --pr_curve output/pr_curve.png
 
 
 ## Acknowledgements
