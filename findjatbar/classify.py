@@ -7,7 +7,7 @@ from itertools import islice
 
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import f1_score, precision_recall_curve, auc
+from sklearn.metrics import f1_score, precision_recall_curve, auc, confusion_matrix
 import pylab as pl
 
 import features
@@ -58,27 +58,49 @@ def main():
     logging.info('Loading test data...')
     X_test, y_test = read_dataset(os.path.join(args.prefix, 'test.json'))
     X_test = vectorizer.transform(X_test)
+    y_pred = best_model.predict(X_test)
 
     print('Tuned regularization parameter: {0} (f1={1})'.format(best_regularization, best_f1_score))
-    print('Test f1: {0}'.format(f1_score(y_test, best_model.predict(X_test))))
+    print('Test f1: {0}'.format(f1_score(y_test, y_pred)))
 
     weights = vectorizer.inverse_transform(best_model.coef_)[0]
     sorted_weights = sorted(weights.iteritems(), key=lambda x: x[1], reverse=True)
-    print
-    print('Top 30 weights:')
-    for i, (feat, weight) in enumerate(islice(sorted_weights, 30)):
-        print('{0}: {1} {2}'.format(i+1, feat, weight))
 
-    print
-    print('Bottom 30 weights:')
-    for i, (feat, weight) in enumerate(islice(reversed(sorted_weights), 30)):
-        print('{0} {1} {2}'.format(i+1, feat, weight))
+    def print_weights(heading, iterator):
+        print(heading)
+        for i, (feat, weight) in enumerate(iterator):
+            print('{0}: {1} {2}'.format(i+1, feat, weight))
 
-    probas_ = best_model.predict_proba(X_test)
-    precision, recall, thresholds = precision_recall_curve(y_test, probas_[:, 1])
-    area = auc(recall, precision)
+    print_weights('\nMost positive 30 weights:', islice(sorted_weights, 30))
+    print_weights('\nMost negative 30 weights:', islice(reversed(sorted_weights), 30))
+
+    def print_confusion_matrix(y_test, y_pred):
+        conf_mat = confusion_matrix(y_test, y_pred)
+        actual = ' Actual '
+        vertical_bar = ' | '
+        horizontal_bar = '-'
+
+        conf_mat_as_strings = str(conf_mat).split('\n')
+        right_padding_length = max(map(lambda s: len(s), conf_mat_as_strings))
+        left_padding_length = len(actual)
+
+        lines = []
+        lines.append(' ' * left_padding_length + vertical_bar +  'Predicted')
+        lines.append('-' * (left_padding_length + len(vertical_bar) + right_padding_length))
+        for i, line in enumerate(conf_mat_as_strings):
+            left_padding = actual if i == 0 else ' ' * left_padding_length
+            lines.append(left_padding + vertical_bar + line)
+        print('\nConfusion matrix:')
+        for line in lines:
+            print(line)
+
+    print_confusion_matrix(y_test, y_pred)
 
     if args.pr_curve:
+        probas_ = best_model.predict_proba(X_test)
+        precision, recall, thresholds = precision_recall_curve(y_test, probas_[:, 1])
+        area = auc(recall, precision)
+
         pl.clf()
         pl.plot(recall, precision, label='Precision-Recall curve')
         pl.xlabel('Recall')
