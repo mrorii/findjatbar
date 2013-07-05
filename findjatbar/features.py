@@ -64,3 +64,18 @@ def filter(stream, mask):
     for features, label in stream:
         features = FeatureVector((k, v) for k, v in features.iteritems() if k[0] in mask)
         yield features, label
+
+
+def prune(instances, threshold=5):
+    feature_counts = defaultdict(int)
+    for instance in instances:
+        for feature in instance:
+            feature_counts[feature] += 1
+
+    valid_features = set(f for f in feature_counts if feature_counts[f] >= threshold)
+
+    for instance in instances:
+        for feature in instance:
+            if not feature in valid_features:
+                del instance[feature]
+    return instances
