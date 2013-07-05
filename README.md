@@ -55,7 +55,7 @@ this can be `Jason`, `Terry`, or `Both`.
 Finally, we train a classifier, tune it on the dev set, and test.
 This step can eat up to about 5GB of memory.
 
-    python findjatbar/classify.py output
+    python findjatbar/classify.py output --pr_curve pr_curve.png
 
 
 ## Acknowledgements

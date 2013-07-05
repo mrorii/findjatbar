@@ -7,7 +7,8 @@ from itertools import islice
 
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, precision_recall_curve, auc
+import pylab as pl
 
 import features
 
@@ -29,6 +30,7 @@ def main():
     parser = argparse.ArgumentParser(description='Run classification')
     parser.add_argument('prefix', help='directory which contains '
                                        '{train,dev,test}.json')
+    parser.add_argument('--pr_curve', help='File to save precision-recall curve')
     args = parser.parse_args()
 
     vectorizer = DictVectorizer()
@@ -72,6 +74,20 @@ def main():
     for i, (feat, weight) in enumerate(islice(reversed(sorted_weights), 30)):
         print('{0} {1} {2}'.format(i+1, feat, weight))
 
+    probas_ = best_model.predict_proba(X_test)
+    precision, recall, thresholds = precision_recall_curve(y_test, probas_[:, 1])
+    area = auc(recall, precision)
+
+    if args.pr_curve:
+        pl.clf()
+        pl.plot(recall, precision, label='Precision-Recall curve')
+        pl.xlabel('Recall')
+        pl.ylabel('Precision')
+        pl.ylim([0.0, 1.05])
+        pl.xlim([0.0, 1.0])
+        pl.title('Precision-Recall example: AUC=%0.2f' % area)
+        pl.legend(loc="lower left")
+        pl.savefig(args.pr_curve)
 
 if __name__ == '__main__':
     main()
