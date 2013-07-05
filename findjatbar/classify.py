@@ -28,7 +28,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Run classification')
     parser.add_argument('prefix', help='directory which contains '
-                                       '{jatbar_reviews,yelp_reviews}.txt')
+                                       '{train,dev,test}.json')
     args = parser.parse_args()
 
     vectorizer = DictVectorizer()
