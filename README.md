@@ -70,6 +70,25 @@ This step can eat up to about 5GB of memory.
 
     python findjatbar/classify.py dataset_jason --pr_curve output/pr_curve.png
 
+## Step 4: scrape even more Yelp reviews and try to find Jason and Terry
+
+We first try to find restaurants on Yelp that Jason and Terry might actually visit.
+In this case, let's look restaurants (excluding the ones found on Jatbar)
+within Santa Clara county that matches the query `burrito`:
+
+    python findjatbar/search_yelp_restraunts.py --query burrito \
+                                                --locations locations.txt \
+                                                --exclude output/yelp_urls.txt \
+                                                --consumer_key YOUR_CONSUMER_KEY \
+                                                --consumer_secret YOUR_CONSUMER_SECRET \
+                                                --token YOUR_TOKEN \
+                                                --token_secret YOUR_TOKEN_SECRET \
+                                                > output/more_yelp_restraunts.txt
+
+Next, we scrape the reviews from these restaurants:
+
+    python findjatbar/scrape_more_yelp_reviews.py < output/more_yelp_restraunts.txt
+                                                  > output/yelp.json
 
 ## Acknowledgements
 

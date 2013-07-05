@@ -4,12 +4,9 @@ import sys
 import re
 import argparse
 import logging
-
 import json
-import oauth2
-import urllib
-import requests
 
+import yelp_api
 
 def get_location(jatbar_url):
     search = re.search(r'http://www.jatbar.com/reviews/(.*)/.*.asp',
@@ -26,29 +23,12 @@ def get_location(jatbar_url):
 
 def get_yelp_url(restaurant_name, location,
                  consumer_key, consumer_secret, token, token_secret):
-    host = 'api.yelp.com'
-    path = '/v2/search'
-    url_params = {
-        'term': restaurant_name,
-        'location': location,
-    }
-    encoded_params = urllib.urlencode(url_params)
-
-    url = 'http://%s%s?%s' % (host, path, encoded_params)
-    consumer = oauth2.Consumer(consumer_key, consumer_secret)
-    oauth_request = oauth2.Request('GET', url, {})
-
-    oauth_request.update({'oauth_nonce': oauth2.generate_nonce(),
-                          'oauth_timestamp': oauth2.generate_timestamp(),
-                          'oauth_token': token,
-                          'oauth_consumer_key': consumer_key})
-    token = oauth2.Token(token, token_secret)
-    oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer,
-                               token)
-    signed_url = oauth_request.to_url()
-
-    res = requests.get(signed_url)
-    response = json.loads(res.content)
+    response = yelp_api.search(query=restaurant_name,
+                               location=location,
+                               consumer_key=consumer_key,
+                               consumer_secret=consumer_secret,
+                               token=token,
+                               token_secret=token_secret)
 
     # We assume that the 1st search result will be
     # the corresponding restaurant on Yelp
@@ -86,8 +66,6 @@ def main():
                                 consumer_secret=args.consumer_secret,
                                 token=args.token,
                                 token_secret=args.token_secret)
-        if i % 100 == 0:
-            logging.info('Processing the {}th restaurant'.format(i))
         print('{}\t{}'.format(restaurant_id, yelp_url))
 
 if __name__ == '__main__':
