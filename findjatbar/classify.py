@@ -3,6 +3,7 @@
 import os
 import logging
 import argparse
+from itertools import islice
 
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -44,20 +45,33 @@ def main():
     f1_scores = []
     for regularization in (100, 10, 1, 0.1, 0.01):
         model = LogisticRegression(penalty='l1', C=regularization)
-        logging.info('regularization: {0}'.format(regularization))
+        logging.info('regularization parameter: {0}'.format(regularization))
         model.fit(X_train, y_train)
         score = f1_score(y_dev, model.predict(X_dev))
         f1_scores.append((score, regularization, model))
-        logging.info('Dev f1: {0}'.format(f1_score))
+        logging.info('Dev f1: {0}'.format(score))
 
     best_f1_score, best_regularization, best_model = max(f1_scores)
 
-    print('Loading test data...')
+    logging.info('Loading test data...')
     X_test, y_test = read_dataset(os.path.join(args.prefix, 'test.json'))
     X_test = vectorizer.transform(X_test)
 
-    print('Tuned regularization: {} (f1={})'.format(best_regularization, best_f1_score))
+    print('Tuned regularization parameter: {0} (f1={1})'.format(best_regularization, best_f1_score))
     print('Test f1: {0}'.format(f1_score(y_test, best_model.predict(X_test))))
+
+    weights = vectorizer.inverse_transform(best_model.coef_)
+    sorted_weights = sorted(weights.iteritems(), key=lambda x: x[1], reverse=True)
+    print()
+    print('Top 30 weights:')
+    for i, (feat, weight) in enumerate(islice(sorted_weights, 30)):
+        print('{0}: {1} {2}'.format(i+1, feat, weight))
+
+    print()
+    print('Bottom 30 weights:')
+    for i, (feat, weight) in enumerate(islice(reversed(sorted_weights), 30)):
+        print('{0} {1} {2}'.format(i+1, feat, weight))
+
 
 if __name__ == '__main__':
     main()
