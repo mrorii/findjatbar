@@ -19,11 +19,11 @@ Python 2.7 is required. Install dependencies with:
 Obtain a list of restaurants stored in Jatbar.
 
     mkdir output
-    python findjatbar/get_restaurants.py > output/restaurants.txt
+    python findjatbar/get_restaurants.py > output/jatbar_restaurants.txt
 
 Scrape Jason and Terry's reviews given the list of restaurants:
 
-    python findjatbar/scrape_jatbar_reviews.py < output/restaurants.txt \
+    python findjatbar/scrape_jatbar_reviews.py < output/jatbar_restaurants.txt \
                                                > output/jatbar_reviews.json
 
 
@@ -39,7 +39,7 @@ In order to do so, you must first register for
                                                       --consumer_secret YOUR_CONSUMER_SECRET \
                                                       --token YOUR_TOKEN \
                                                       --token_secret YOUR_TOKEN_SECRET \
-                                                      < output/restaurants.txt \
+                                                      < output/jatbar_restaurants.txt \
                                                       > output/yelp_urls.txt
 
 We can then scrape the Yelp reviews.
@@ -76,19 +76,19 @@ We first try to find restaurants on Yelp that Jason and Terry might actually vis
 In this case, let's look restaurants (excluding the ones found on Jatbar)
 within Santa Clara county that matches the query `burrito`:
 
-    python findjatbar/search_yelp_restraunts.py --query burrito \
-                                                --locations locations.txt \
-                                                --exclude output/yelp_urls.txt \
-                                                --consumer_key YOUR_CONSUMER_KEY \
-                                                --consumer_secret YOUR_CONSUMER_SECRET \
-                                                --token YOUR_TOKEN \
-                                                --token_secret YOUR_TOKEN_SECRET \
-                                                > output/more_yelp_restraunts.txt
+    python findjatbar/search_yelp_restaurants.py --query burrito \
+                                                 --locations locations.txt \
+                                                 --exclude output/yelp_urls.txt \
+                                                 --consumer_key YOUR_CONSUMER_KEY \
+                                                 --consumer_secret YOUR_CONSUMER_SECRET \
+                                                 --token YOUR_TOKEN \
+                                                 --token_secret YOUR_TOKEN_SECRET \
+                                                 > output/more_yelp_restraunts.txt
 
 Next, we scrape the reviews from these restaurants:
 
-    python findjatbar/scrape_more_yelp_reviews.py < output/more_yelp_restraunts.txt
-                                                  > output/yelp.json
+    python findjatbar/scrape_more_yelp_reviews.py < output/more_yelp_restaurants.txt \
+                                                  > output/more_yelp_reviews.json
 
 ## Acknowledgements
 

@@ -5,17 +5,17 @@ import argparse
 import logging
 from collections import namedtuple
 
-import yelp_api
+import yelp_helper
 
 Restaurant = namedtuple('Restaurant', 'url, review_count')
 
 def get_yelp_restaurants(location, args):
-    response = yelp_api.search(query=args.query,
-                               location=location,
-                               consumer_key=args.consumer_key,
-                               consumer_secret=args.consumer_secret,
-                               token=args.token,
-                               token_secret=args.token_secret)
+    response = yelp_helper.search(query=args.query,
+                                  location=location,
+                                  consumer_key=args.consumer_key,
+                                  consumer_secret=args.consumer_secret,
+                                  token=args.token,
+                                  token_secret=args.token_secret)
     if 'businesses' in response and response['businesses']:
         return map(lambda business: Restaurant(url=business['url'],
                                                review_count=business['review_count']),
