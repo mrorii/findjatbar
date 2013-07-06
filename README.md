@@ -68,7 +68,8 @@ Finally, we train a classifier using `train.json`, tune it on `dev.json`,
 and test on `test.json`.
 This step can eat up to about 5GB of memory.
 
-    python findjatbar/classify.py dataset_jason --pr_curve output/pr_curve.png
+    python findjatbar/classify.py dataset_jason --pr_curve output/pr_curve.png \
+                                                --model output/model.pkl
 
 ## Step 4: scrape even more Yelp reviews and try to find Jason and Terry
 

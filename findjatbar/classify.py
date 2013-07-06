@@ -67,6 +67,7 @@ def main():
     parser.add_argument('prefix', help='directory which contains '
                                        '{train,dev,test}.json')
     parser.add_argument('--pr_curve', help='File to save precision-recall curve')
+    parser.add_argument('--model', help='Pickled file to save best model')
     args = parser.parse_args()
 
     vectorizer = DictVectorizer()
@@ -118,6 +119,15 @@ def main():
     if args.pr_curve:
         probas_ = best_model.predict_proba(X_test)
         plot_pr_curve(args.pr_curve, y_test, probas_)
+
+    if args.model:
+        logging.info('Pickling best model...')
+        try:
+            import cPickle as pickle
+        except:
+            import pickle
+        with open(args.model, 'w') as f:
+            pickle.dump({'model': best_model, 'vectorizer': vectorizer}, f)
 
 if __name__ == '__main__':
     main()
