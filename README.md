@@ -91,6 +91,12 @@ Next, we scrape the reviews from these restaurants:
     python findjatbar/scrape_more_yelp_reviews.py < output/more_yelp_restaurants.txt \
                                                   > output/more_yelp_reviews.json
 
+Finally, let's see if Jason and Terry are hiding on Yelp:
+
+    python findjatbar/find_jatbar.py --model output/model.pkl \
+                                     --test output/more_yelp_reviews.json
+
+
 ## Acknowledgements
 
 This project is heavily influenced by the following repository:

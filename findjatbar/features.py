@@ -57,7 +57,8 @@ def extract(filename):
             features = FeatureVector()
             for feat in description(review):
                 features[feat] = 1
-            yield features, review['label']
+            label = review['label'] if 'label' in review else -1
+            yield features, label
 
 
 def filter(stream, mask):

@@ -27,12 +27,11 @@ def main():
 
     if args.target == 'Jason' or args.target == 'Terry':
         pos_data = filter(lambda d: d['author'] == args.target, data)
-        neg_data = filter(lambda d: d['author'] != args.target, data)
     elif args.target == 'Both':
         pos_data = filter(lambda d: d['author'] == 'Jason' or
                                     d['author'] == 'Terry', data)
-        neg_data = filter(lambda d: d['author'] != 'Jason' and
-                                    d['author'] != 'Terry', data)
+    neg_data = filter(lambda d: d['author'] != 'Jason' and
+                                d['author'] != 'Terry', data)
 
     for d in pos_data:
         d['label'] = 1

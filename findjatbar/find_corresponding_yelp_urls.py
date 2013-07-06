@@ -4,7 +4,6 @@ import sys
 import re
 import argparse
 import logging
-import json
 
 import yelp_api
 
