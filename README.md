@@ -2,7 +2,7 @@
 
 [jatbar.com](http://www.jatbar.com/) (Jason and Terry's Bay Area Review)
 was a legendary restaurant review site for the Bay Area.
-Unfortunately, the website was closed in 2009 :cry:.
+Unfortunately, the website was shut down in 2009 :cry:.
 
 Let's see if Jason and Terry aren't hiding on [Yelp](http://www.yelp.com/)
 by using machine learning.
@@ -66,16 +66,18 @@ in the specified `dataset_jason` directory.
 
 Finally, we train a classifier using `train.json`, tune it on `dev.json`,
 and test on `test.json`.
-This step can eat up to about 5GB of memory.
+Be careful, as this step can eat up to about 5GB of memory.
+You can dump the best performing model with the `--model` option.
 
     python findjatbar/classify.py dataset_jason --pr_curve output/pr_curve.png \
                                                 --model output/model.pkl
 
 ## Step 4: scrape even more Yelp reviews and try to find Jason and Terry
 
-We first try to find restaurants on Yelp that Jason and Terry might actually visit.
-In this case, let's look restaurants (excluding the ones found on Jatbar)
-within Santa Clara county that matches the query `burrito`:
+We first try to find restaurants on Yelp that Jason (and Terry) might actually visit.
+In this case, let's look at restaurants (excluding the ones found on Jatbar)
+within Santa Clara county that matches the query `burrito`,
+since Jason loves burritos so much:
 
     python findjatbar/search_yelp_restaurants.py --query burrito \
                                                  --locations locations.txt \
@@ -91,7 +93,7 @@ Next, we scrape the reviews from these restaurants:
     python findjatbar/scrape_more_yelp_reviews.py < output/more_yelp_restaurants.txt \
                                                   > output/more_yelp_reviews.json
 
-Finally, let's see if Jason and Terry are hiding on Yelp:
+Finally, let's see if our model predicts that these reviews were written by Jason (or Terry):
 
     python findjatbar/find_jatbar.py --model output/model.pkl \
                                      --test output/more_yelp_reviews.json
